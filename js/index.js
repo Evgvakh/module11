@@ -13,7 +13,7 @@ const addActionButton = document.querySelector('.add__action__btn'); // кноп
 
 // список фруктов в JSON формате
 let fruitsJSON = `[
-  {"kind": "Мангустин", "color": "фиолетовый", "weight": 13},
+  {"kind": "Мангуeстин", "color": "фиолетовый", "weight": 13},
   {"kind": "Дуриан", "color": "зеленый", "weight": 35},
   {"kind": "Личи", "color": "розово-красный", "weight": 17},
   {"kind": "Карамбола", "color": "желтый", "weight": 28},
@@ -27,21 +27,56 @@ let fruits = JSON.parse(fruitsJSON);
 
 // отрисовка карточек
 const display = () => {
+  fruitsList.innerHTML = "";
   // TODO: очищаем fruitsList от вложенных элементов,
   // чтобы заполнить актуальными данными из fruits
 
-  for (let i = 0; i < fruits.length; i++) {
-    // TODO: формируем новый элемент <li> при помощи document.createElement,
-    // и добавляем в конец списка fruitsList при помощи document.appendChild
+  for (let i in fruits) {
+    const li = document.createElement("li");
+    
+    if (fruits[i].color === 'фиолетовый') {
+      li.className = "fruit__item fruit_violet";
+    } else if (fruits[i].color === 'зеленый') {
+      li.className = "fruit__item fruit_green"
+    } else if (fruits[i].color === 'розово-красный') {
+      li.className = "fruit__item fruit_carmazin"
+    } else if (fruits[i].color === 'желтый') {
+      li.className = "fruit__item fruit_yellow"
+    } else if (fruits[i].color === 'светло-коричневый') {
+      li.className = "fruit__item fruit_lightbrown"
+    } else {
+      li.className = "fruit__item fruit_added"
+    };
+
+    const div = document.createElement("div");
+    div.className = "fruit__info";
+
+    const divIndex = document.createElement("div");
+    divIndex.innerHTML = `Index: ${i}`
+    div.appendChild(divIndex);
+
+    const divKind = document.createElement("div");
+    divKind.innerHTML = `Kind: ${fruits[i].kind}`
+    div.appendChild(divKind);
+
+    const divColor = document.createElement("div");
+    divColor.innerHTML = `Color: ${fruits[i].color}`
+    div.appendChild(divColor);
+
+    const divWeight = document.createElement("div");
+    divWeight.innerHTML = `Weight: ${fruits[i].weight} кг.`
+    div.appendChild(divWeight);
+
+    li.appendChild(div);
+
+    list.appendChild(li);
   }
 };
 
-// первая отрисовка карточек
 display();
 
 /*** ПЕРЕМЕШИВАНИЕ ***/
 
-// генерация случайного числа в заданном диапазоне
 const getRandomInt = (min, max) => {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
@@ -52,13 +87,20 @@ const shuffleFruits = () => {
 
   // ATTENTION: сейчас при клике вы запустите бесконечный цикл и браузер зависнет
   while (fruits.length > 0) {
+    
+    let i = getRandomInt(0, fruits.length);
+    let copy = fruits[i];
+    result.push(copy);
+    fruits.splice(i, 1);
+    
+    
     // TODO: допишите функцию перемешивания массива
     //
     // Подсказка: находим случайный элемент из fruits, используя getRandomInt
     // вырезаем его из fruits и вставляем в result.
     // ex.: [1, 2, 3], [] => [1, 3], [2] => [3], [2, 1] => [], [2, 1, 3]
     // (массив fruits будет уменьшатся, а result заполняться)
-  }
+  };
 
   fruits = result;
 };
@@ -128,6 +170,20 @@ sortActionButton.addEventListener('click', () => {
 /*** ДОБАВИТЬ ФРУКТ ***/
 
 addActionButton.addEventListener('click', () => {
+
+  const newFruit = {};
+
+  newFruit.kind = document.querySelector(".kind__input").value;
+  newFruit.color = document.querySelector(".color__input").value;
+  if (isNaN(document.querySelector(".weight__input").value)) {
+    alert('Введите число в поле "Weight"!');
+  } else {    
+    newFruit.weight = document.querySelector(".weight__input").value;
+  }
+  console.log(newFruit);
+  fruits.push(newFruit);
+
+
   // TODO: создание и добавление нового фрукта в массив fruits
   // необходимые значения берем из kindInput, colorInput, weightInput
   display();

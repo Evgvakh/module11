@@ -127,6 +127,10 @@ main {
   background: #cd853f;
 }
 
+.fruit_added {
+  background: #103ed4;
+}
+
 .fruit__info {
   display: flex;
   justify-content: center;
